@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { background-color: #0A0B0D; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #111318; }
+  ::-webkit-scrollbar-thumb { background: #2A3042; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C8102E; }
+}
+
+@layer components {
+  .card {
+    @apply bg-hg-card border border-hg-border rounded-xl;
+  }
+  .btn-primary {
+    @apply bg-hg-red hover:bg-hg-red-light text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 text-sm;
+  }
+  .btn-secondary {
+    @apply bg-hg-muted hover:bg-hg-border text-hg-light font-medium px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 text-sm;
+  }
+  .btn-ghost {
+    @apply hover:bg-hg-muted text-hg-text hover:text-hg-light font-medium px-4 py-2 rounded-lg transition-all duration-200 flex items-center gap-2 text-sm;
+  }
+  .input-field {
+    @apply bg-hg-dark border border-hg-border rounded-lg px-3 py-2 text-hg-white text-sm placeholder-hg-text focus:outline-none focus:border-hg-red focus:ring-1 focus:ring-hg-red/20 transition-all w-full;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium border;
+  }
+  .stat-card {
+    @apply card p-5 flex flex-col gap-2;
+  }
+  .table-row {
+    @apply border-b border-hg-border hover:bg-hg-muted/30 transition-colors;
+  }
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer;
+  }
+  .sidebar-item-active {
+    @apply bg-hg-red/10 text-hg-red border border-hg-red/20;
+  }
+  .sidebar-item-inactive {
+    @apply text-hg-text hover:text-hg-light hover:bg-hg-muted/50;
+  }
+}
+
+.animate-in {
+  animation: slideIn 0.25s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.glass {
+  background: rgba(22, 26, 34, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.hg-gradient {
+  background: linear-gradient(135deg, #C8102E 0%, #8B0A1F 100%);
+}
+
+.hg-glow {
+  box-shadow: 0 0 20px rgba(200, 16, 46, 0.3);
+}
