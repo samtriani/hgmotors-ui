@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useInventoryStore } from '../store/inventoryStore';
@@ -8,10 +9,10 @@ import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar
 } from 'recharts';
-import { SALES_MONTHLY_DATA, MOCK_USERS } from '../mock/data';
+import { SALES_MONTHLY_DATA, SALES_DETAIL_BY_MONTH, MOCK_USERS } from '../mock/data';
 import {
   Car, Users, DollarSign, AlertTriangle, TrendingUp,
-  Trophy, Clock, Target, CheckCircle, ArrowUpRight
+  Trophy, Clock, Target, CheckCircle, ArrowUpRight, X
 } from 'lucide-react';
 import dayjs from 'dayjs';
 
@@ -44,11 +45,16 @@ function StatCard({ icon: Icon, label, value, sub, color = 'text-hg-red', trend,
   );
 }
 
+const SELLER_COLORS: Record<string, string> = {
+  Alejandro: '#dc2626', Patricia: '#7c3aed', Omar: '#d97706',
+};
+
 function DirectorDashboard() {
   const navigate = useNavigate();
   const cars = useInventoryStore(s => s.cars);
   const sales = useSalesStore(s => s.sales);
   const clients = useCRMStore(s => s.clients);
+  const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
 
   const disponibles = cars.filter(c => c.status === 'DISPONIBLE').length;
   const vendidos = cars.filter(c => c.status === 'VENDIDO').length;
@@ -73,12 +79,16 @@ function DirectorDashboard() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-hg-white font-semibold">Ventas Mensuales</h3>
-              <p className="text-hg-text text-xs mt-0.5">Últimos 6 meses · MXN</p>
+              <p className="text-hg-text text-xs mt-0.5">Últimos 6 meses · clic en mes para ver detalle</p>
             </div>
             <span className="badge text-emerald-400 bg-emerald-400/10 border-emerald-400/20">En vivo</span>
           </div>
           <ResponsiveContainer width="100%" height={200}>
-            <AreaChart data={SALES_MONTHLY_DATA}>
+            <AreaChart
+              data={SALES_MONTHLY_DATA}
+              onClick={d => { if (d?.activePayload) setSelectedMonth(d.activePayload[0].payload.mes); }}
+              style={{ cursor: 'pointer' }}
+            >
               <defs>
                 <linearGradient id="redGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#C8102E" stopOpacity={0.3} />
@@ -89,13 +99,84 @@ function DirectorDashboard() {
               <XAxis dataKey="mes" tick={{ fill: '#8892A4', fontSize: 11 }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fill: '#8892A4', fontSize: 10 }} axisLine={false} tickLine={false} tickFormatter={v => `$${(v/1000000).toFixed(1)}M`} />
               <Tooltip
-                contentStyle={{ background: '#161A22', border: '1px solid #1E2330', borderRadius: '8px', fontSize: 12 }}
-                labelStyle={{ color: '#C4CDD8' }}
-                formatter={(v: number) => [formatCurrency(v), 'Monto']}
+                contentStyle={{ background: '#161A22', border: '1px solid #1E2330', borderRadius: '8px', fontSize: 12, padding: '10px 14px' }}
+                labelStyle={{ color: '#C4CDD8', fontWeight: 600, marginBottom: 4 }}
+                content={({ active, payload, label }) => {
+                  if (!active || !payload?.length) return null;
+                  const d = payload[0].payload;
+                  return (
+                    <div style={{ background: '#161A22', border: '1px solid #1E2330', borderRadius: 8, padding: '10px 14px', fontSize: 12 }}>
+                      <p style={{ color: '#C4CDD8', fontWeight: 600, marginBottom: 6 }}>{label}</p>
+                      <p style={{ color: '#22c55e', fontFamily: 'monospace' }}>{formatCurrency(d.monto)}</p>
+                      <p style={{ color: '#8892A4', marginTop: 2 }}>{d.ventas} vehículos vendidos</p>
+                      <p style={{ color: '#8892A4', fontSize: 10, marginTop: 4 }}>Clic para ver detalle</p>
+                    </div>
+                  );
+                }}
               />
-              <Area type="monotone" dataKey="monto" stroke="#C8102E" fill="url(#redGrad)" strokeWidth={2} dot={{ fill: '#C8102E', r: 3 }} />
+              <Area type="monotone" dataKey="monto" stroke="#C8102E" fill="url(#redGrad)" strokeWidth={2}
+                dot={({ cx, cy, payload }) => (
+                  <circle key={payload.mes} cx={cx} cy={cy} r={selectedMonth === payload.mes ? 5 : 3}
+                    fill={selectedMonth === payload.mes ? '#fff' : '#C8102E'}
+                    stroke="#C8102E" strokeWidth={2} />
+                )}
+              />
             </AreaChart>
           </ResponsiveContainer>
+
+          {/* Detail panel */}
+          {selectedMonth && (() => {
+            const isCurrentMonth = selectedMonth === 'Abr';
+            const details = isCurrentMonth
+              ? sales.filter(s => s.status === 'COMPLETADA').map(s => {
+                  const car = cars.find(c => c.id === s.carId);
+                  const seller = MOCK_USERS.find(u => u.id === s.sellerId);
+                  return {
+                    brand: car?.brand ?? '—', model: car?.model ?? '—',
+                    version: car?.version ?? '', year: car?.year ?? 0,
+                    price: s.finalPrice,
+                    seller: seller?.name.split(' ')[0] ?? '—',
+                    method: s.paymentMethod.replace('_', ' '),
+                  };
+                })
+              : (SALES_DETAIL_BY_MONTH[selectedMonth] ?? []);
+
+            const total = details.reduce((a, d) => a + d.price, 0);
+
+            return (
+              <div className="mt-4 border-t border-hg-border pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <span className="text-hg-white font-semibold text-sm">{selectedMonth} · {details.length} vehículos</span>
+                    <span className="text-emerald-400 font-mono text-sm ml-3">{formatCurrency(total)}</span>
+                  </div>
+                  <button onClick={() => setSelectedMonth(null)} className="text-hg-text hover:text-hg-light transition-colors">
+                    <X size={15} />
+                  </button>
+                </div>
+                <div className="space-y-2 max-h-52 overflow-y-auto pr-1">
+                  {details.map((d, i) => {
+                    const color = SELLER_COLORS[d.seller] ?? '#dc2626';
+                    return (
+                      <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg bg-hg-muted/20 hover:bg-hg-muted/30 transition-colors">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-7 h-7 rounded-md flex items-center justify-center text-[10px] font-bold font-mono border flex-shrink-0"
+                            style={{ background: `${color}20`, borderColor: `${color}40`, color }}>
+                            {d.seller.slice(0, 2).toUpperCase()}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-hg-white text-xs font-medium truncate">{d.brand} {d.model} {d.year}</p>
+                            <p className="text-hg-text text-[10px] truncate">{d.version} · {d.method}</p>
+                          </div>
+                        </div>
+                        <span className="text-emerald-400 text-xs font-mono font-bold flex-shrink-0 ml-3">{formatCurrency(d.price)}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Top stats */}

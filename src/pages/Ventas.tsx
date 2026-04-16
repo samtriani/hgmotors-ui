@@ -5,8 +5,9 @@ import { useCRMStore } from '../store/crmStore';
 import { useAuthStore } from '../store/authStore';
 import { useForm } from 'react-hook-form';
 import { formatCurrency, getStatusColor, getStatusLabel } from '../utils';
-import { Plus, X, DollarSign, Car, User, CheckCircle, FileText } from 'lucide-react';
-import type { Sale } from '../types';
+import { Plus, X, DollarSign, Car, User, CheckCircle, FileText, Gauge, Palette, Settings, Fuel } from 'lucide-react';
+import type { Sale, Car as CarType } from '../types';
+import { MOCK_USERS } from '../mock/data';
 import dayjs from 'dayjs';
 
 type SaleForm = Omit<Sale, 'id' | 'commission'>;
@@ -96,25 +97,105 @@ function SaleModal({ onClose, onSave }: { onClose: () => void; onSave: (data: Sa
   );
 }
 
-function SaleTicket({ sale }: { sale: Sale }) {
+function CarDetailModal({ car, onClose }: { car: CarType; onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/70" onClick={onClose} />
+      <div className="card w-full max-w-lg relative z-10 animate-in overflow-hidden">
+        {/* Image */}
+        <div className="relative h-52 bg-hg-muted overflow-hidden">
+          <img
+            src={car.image} alt={car.model}
+            className="w-full h-full object-cover"
+            onError={e => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/500x200/1E2330/8892A4?text=Sin+Imagen'; }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-hg-card/90 to-transparent" />
+          <button onClick={onClose} className="absolute top-3 right-3 w-8 h-8 bg-hg-dark/80 rounded-lg flex items-center justify-center text-hg-light hover:text-white transition-colors">
+            <X size={16} />
+          </button>
+          <div className="absolute bottom-4 left-4 right-4">
+            <h2 className="text-white font-bold text-xl">{car.brand} {car.model}</h2>
+            <p className="text-hg-light text-sm">{car.version} · {car.year}</p>
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="p-5">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-hg-white text-2xl font-bold font-mono">{formatCurrency(car.price)}</span>
+            <span className="badge text-hg-text bg-hg-muted/40 border-hg-border">VIN: {car.vin}</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            {[
+              { icon: Gauge,    label: 'Kilometraje',  value: `${car.km.toLocaleString('es-MX')} km` },
+              { icon: Palette,  label: 'Color',        value: car.color },
+              { icon: Settings, label: 'Transmisión',  value: car.transmission },
+              { icon: Fuel,     label: 'Combustible',  value: car.fuelType },
+            ].map(item => (
+              <div key={item.label} className="bg-hg-muted/30 rounded-lg p-3 flex items-center gap-2">
+                <item.icon size={14} className="text-hg-text flex-shrink-0" />
+                <div>
+                  <p className="text-hg-text text-[10px] uppercase tracking-wider">{item.label}</p>
+                  <p className="text-hg-white text-sm font-medium mt-0.5">{item.value}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {car.description && (
+            <p className="text-hg-text text-sm leading-relaxed border-t border-hg-border pt-3">{car.description}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const AGENT_COLORS: Record<string, string> = {
+  u3: '#dc2626', u6: '#7c3aed', u7: '#d97706',
+};
+
+function SaleTicket({ sale, onCarClick }: { sale: Sale; onCarClick: (car: CarType) => void }) {
   const car = useInventoryStore(s => s.getCar(sale.carId));
   const client = useCRMStore(s => s.getClient(sale.clientId));
+  const seller = MOCK_USERS.find(u => u.id === sale.sellerId);
+  const sellerColor = seller ? (AGENT_COLORS[seller.id] ?? '#dc2626') : '#dc2626';
+
   return (
     <div className="card p-5 border-l-4 border-l-hg-red hover:border-hg-muted transition-all">
       <div className="flex items-start justify-between mb-3">
         <div>
           <p className="text-hg-text text-xs font-mono">#{sale.id.toUpperCase()}</p>
-          <h3 className="text-hg-white font-semibold mt-0.5">
-            {car ? `${car.brand} ${car.model} ${car.year}` : 'Vehículo'}
-          </h3>
-          <p className="text-hg-text text-xs">{car?.version}</p>
+          <button
+            onClick={() => car && onCarClick(car)}
+            className={`text-left mt-0.5 group ${car ? 'cursor-pointer' : ''}`}
+          >
+            <h3 className="text-hg-white font-semibold group-hover:text-hg-red transition-colors flex items-center gap-1.5">
+              {car ? `${car.brand} ${car.model} ${car.year}` : 'Vehículo'}
+              {car && <Car size={13} className="text-hg-text group-hover:text-hg-red transition-colors" />}
+            </h3>
+            <p className="text-hg-text text-xs">{car?.version}</p>
+          </button>
         </div>
         <span className={`badge ${getStatusColor(sale.status)}`}>{getStatusLabel(sale.status)}</span>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-3">
         <div className="bg-hg-muted/30 rounded-lg p-3">
           <p className="text-hg-text text-[10px] uppercase tracking-wider">Cliente</p>
           <p className="text-hg-white text-xs font-medium mt-0.5 truncate">{client?.name || '—'}</p>
+        </div>
+        <div className="bg-hg-muted/30 rounded-lg p-3">
+          <p className="text-hg-text text-[10px] uppercase tracking-wider">Agente</p>
+          <div className="flex items-center gap-1.5 mt-0.5">
+            <div
+              className="w-5 h-5 rounded-md text-[9px] font-bold font-mono flex items-center justify-center border flex-shrink-0"
+              style={{ background: `${sellerColor}22`, borderColor: `${sellerColor}44`, color: sellerColor }}
+            >
+              {seller?.avatar ?? '?'}
+            </div>
+            <p className="text-hg-white text-xs font-medium truncate">{seller?.name.split(' ')[0] ?? '—'}</p>
+          </div>
         </div>
         <div className="bg-hg-muted/30 rounded-lg p-3">
           <p className="text-hg-text text-[10px] uppercase tracking-wider">Precio Final</p>
@@ -130,8 +211,8 @@ function SaleTicket({ sale }: { sale: Sale }) {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <span className="text-hg-text text-xs">{dayjs(sale.saleDate).format('DD/MM/YYYY')}</span>
-        {sale.notes && <p className="text-hg-text text-xs italic truncate max-w-[200px]">{sale.notes}</p>}
+        <span className="text-hg-text text-xs">{dayjs(sale.saleDate).format('DD MMM YYYY')}</span>
+        {sale.notes && <p className="text-hg-text text-xs italic truncate max-w-[240px]">{sale.notes}</p>}
       </div>
     </div>
   );
@@ -142,6 +223,7 @@ export default function Ventas() {
   const { updateCarStatus } = useInventoryStore();
   const { updateClientStatus } = useCRMStore();
   const [showModal, setShowModal] = useState(false);
+  const [detailCar, setDetailCar] = useState<CarType | null>(null);
 
   const totalVentas = sales.filter(s => s.status === 'COMPLETADA').reduce((a, s) => a + s.finalPrice, 0);
   const totalComisiones = sales.reduce((a, s) => a + s.commission, 0);
@@ -203,12 +285,15 @@ export default function Ventas() {
             <p className="text-hg-text">No hay ventas registradas aún.</p>
           </div>
         ) : (
-          sales.map(sale => <SaleTicket key={sale.id} sale={sale} />)
+          sales.map(sale => <SaleTicket key={sale.id} sale={sale} onCarClick={setDetailCar} />)
         )}
       </div>
 
       {showModal && (
         <SaleModal onClose={() => setShowModal(false)} onSave={handleSave} />
+      )}
+      {detailCar && (
+        <CarDetailModal car={detailCar} onClose={() => setDetailCar(null)} />
       )}
     </div>
   );
