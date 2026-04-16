@@ -9,6 +9,7 @@ import Ventas from './pages/Ventas';
 import Credito from './pages/Credito';
 import Taller from './pages/Taller';
 import Administracion from './pages/Administracion';
+import Desempeno from './pages/Desempeno';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const user = useAuthStore(s => s.user);
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="credito" element={<Credito />} />
           <Route path="taller" element={<Taller />} />
           <Route path="administracion" element={<Administracion />} />
+          <Route path="desempeno" element={<Desempeno />} />
         </Route>
         <Route path="*" element={<Navigate to="/dashboard" replace />} />
       </Routes>

@@ -1,8 +1,9 @@
 import { NavLink, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.png';
 import { useAuthStore } from '../store/authStore';
 import {
   LayoutDashboard, Car, Users, DollarSign, Calculator,
-  Wrench, FileText, LogOut, ChevronRight, MapPin
+  Wrench, FileText, LogOut, ChevronRight, MapPin, BarChart2
 } from 'lucide-react';
 import { getRoleLabel } from '../utils';
 
@@ -14,6 +15,7 @@ const NAV_ITEMS = [
   { to: '/credito', icon: Calculator, label: 'Simulador Crédito', roles: ['DIRECTOR','GERENTE','VENDEDOR','ADMIN'] },
   { to: '/taller', icon: Wrench, label: 'Taller', roles: ['DIRECTOR','GERENTE','TALLER','ADMIN'] },
   { to: '/administracion', icon: FileText, label: 'Administración', roles: ['DIRECTOR','ADMIN'] },
+  { to: '/desempeno', icon: BarChart2, label: 'Desempeño Equipo', roles: ['DIRECTOR','GERENTE'] },
 ];
 
 export default function Sidebar({ collapsed, onClose }: { collapsed?: boolean; onClose?: () => void }) {
@@ -29,7 +31,7 @@ export default function Sidebar({ collapsed, onClose }: { collapsed?: boolean; o
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 py-5 border-b border-hg-border">
         <div className="w-9 h-9 rounded-xl overflow-hidden bg-hg-card border border-hg-border flex-shrink-0">
-          <img src="https://hgmotors.mx/wp-content/uploads/2023/06/HgLogo-03.png" alt="HG" className="w-full h-full object-contain p-1" />
+          <img src={logo} alt="HG Motors" className="w-full h-full object-contain p-1" />
         </div>
         {!collapsed && (
           <div>

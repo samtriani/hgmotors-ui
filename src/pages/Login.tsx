@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { Eye, EyeOff, Car, AlertCircle } from 'lucide-react';
@@ -45,7 +46,7 @@ export default function Login() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 overflow-hidden border border-hg-border bg-hg-card">
             <img
-              src="https://hgmotors.mx/wp-content/uploads/2023/06/HgLogo-03.png"
+              src={logo}
               alt="HG Motors"
               className="w-16 h-16 object-contain"
             />
