@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useInventoryStore } from '../store/inventoryStore';
 import { useSalesStore } from '../store/salesStore';
@@ -16,11 +17,14 @@ import dayjs from 'dayjs';
 
 const CLIENT_STATUSES = ['NUEVO', 'SEGUIMIENTO', 'NEGOCIACION', 'CERRADO'];
 
-function StatCard({ icon: Icon, label, value, sub, color = 'text-hg-red', trend }: {
-  icon: React.ElementType; label: string; value: string | number; sub?: string; color?: string; trend?: string;
+function StatCard({ icon: Icon, label, value, sub, color = 'text-hg-red', trend, onClick }: {
+  icon: React.ElementType; label: string; value: string | number; sub?: string; color?: string; trend?: string; onClick?: () => void;
 }) {
   return (
-    <div className="stat-card group hover:border-hg-muted transition-all">
+    <div
+      className={`stat-card group hover:border-hg-muted transition-all ${onClick ? 'cursor-pointer hover:scale-[1.02] active:scale-[0.99]' : ''}`}
+      onClick={onClick}
+    >
       <div className="flex items-start justify-between">
         <div className={`w-10 h-10 rounded-xl flex items-center justify-center bg-current/10 ${color}`}>
           <Icon size={20} className="opacity-80" />
@@ -41,6 +45,7 @@ function StatCard({ icon: Icon, label, value, sub, color = 'text-hg-red', trend 
 }
 
 function DirectorDashboard() {
+  const navigate = useNavigate();
   const cars = useInventoryStore(s => s.cars);
   const sales = useSalesStore(s => s.sales);
   const clients = useCRMStore(s => s.clients);
@@ -56,7 +61,7 @@ function DirectorDashboard() {
     <div className="space-y-6">
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard icon={DollarSign} label="Ventas del Mes" value={formatCurrency(ventasMes)} sub="Mes en curso" color="text-emerald-400" trend="+12%" />
+        <StatCard icon={DollarSign} label="Ventas del Mes" value={formatCurrency(ventasMes)} sub="Mes en curso" color="text-emerald-400" trend="+12%" onClick={() => navigate('/ventas')} />
         <StatCard icon={Car} label="Inventario Total" value={formatCurrency(totalInventario)} sub={`${disponibles} autos disponibles`} color="text-blue-400" />
         <StatCard icon={AlertTriangle} label="Autos +60 días" value={alerta60} sub="Requieren atención" color="text-amber-400" />
         <StatCard icon={Users} label="Leads Activos" value={leadsActivos} sub="Clientes en proceso" color="text-violet-400" trend="+3 hoy" />
