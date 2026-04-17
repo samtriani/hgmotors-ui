@@ -3,7 +3,7 @@ import logo from '../assets/logo.png';
 import { useAuthStore } from '../store/authStore';
 import {
   LayoutDashboard, Car, Users, DollarSign, Calculator,
-  Wrench, FileText, LogOut, ChevronRight, MapPin, BarChart2
+  Wrench, FileText, LogOut, ChevronRight, MapPin, BarChart2, PieChart
 } from 'lucide-react';
 import { getRoleLabel } from '../utils';
 
@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { to: '/taller', icon: Wrench, label: 'Taller', roles: ['DIRECTOR','GERENTE','TALLER','ADMIN'] },
   { to: '/administracion', icon: FileText, label: 'Administración', roles: ['DIRECTOR','ADMIN'] },
   { to: '/desempeno', icon: BarChart2, label: 'Desempeño Equipo', roles: ['DIRECTOR','GERENTE'] },
+  { to: '/reportes',  icon: PieChart,  label: 'Reportes',        roles: ['DIRECTOR','ADMIN'] },
 ];
 
 export default function Sidebar({ collapsed, onClose }: { collapsed?: boolean; onClose?: () => void }) {
