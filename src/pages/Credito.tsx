@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useInventoryStore } from '../store/inventoryStore';
 import { formatCurrency, calculateCredit } from '../utils';
-import { Calculator, TrendingUp, Car, MessageCircle, RefreshCw } from 'lucide-react';
+import { Calculator, TrendingUp, RefreshCw } from 'lucide-react';
 
 const PLAZO_OPTIONS = [12, 24, 36, 48, 60];
 
@@ -11,6 +11,7 @@ export default function Credito() {
   const [downPayment, setDownPayment] = useState(80000);
   const [months, setMonths] = useState(36);
   const [selectedCarId, setSelectedCarId] = useState('');
+  const [annualRate, setAnnualRate] = useState(18);
 
   const handleCarSelect = (id: string) => {
     setSelectedCarId(id);
@@ -23,7 +24,7 @@ export default function Credito() {
 
   const downPct = Math.round((downPayment / carPrice) * 100);
   const financed = carPrice - downPayment;
-  const result = financed > 0 ? calculateCredit(carPrice, downPayment, months) : null;
+  const result = financed > 0 ? calculateCredit(carPrice, downPayment, months, annualRate / 100) : null;
 
   const selectedCar = cars.find(c => c.id === selectedCarId);
 
@@ -125,7 +126,24 @@ export default function Credito() {
             </div>
           </div>
 
-          <p className="text-hg-text/50 text-xs">* Tasa de interés referencial 18% anual. Sujeto a aprobación de crédito.</p>
+          {/* Tasa de interés */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <label className="text-hg-text text-xs font-medium uppercase tracking-wider">Tasa de Interés Anual</label>
+              <span className="text-hg-white font-mono text-sm font-bold">{annualRate.toFixed(1)}%</span>
+            </div>
+            <input
+              type="range" min={5} max={40} step={0.5}
+              value={annualRate}
+              onChange={e => setAnnualRate(Number(e.target.value))}
+              className="w-full accent-hg-red h-1.5 rounded-full"
+            />
+            <div className="flex justify-between text-hg-text/50 text-xs mt-1">
+              <span>5%</span><span>40%</span>
+            </div>
+          </div>
+
+          <p className="text-hg-text/50 text-xs">* Sujeto a aprobación de crédito.</p>
         </div>
 
         {/* Results panel */}
@@ -185,14 +203,6 @@ export default function Credito() {
                 </div>
               </div>
 
-              <a
-                href={`https://api.whatsapp.com/send?phone=5216699942914&text=Hola! Estoy interesado en un crédito para ${selectedCar ? `${selectedCar.brand} ${selectedCar.model} ${selectedCar.year}` : 'un auto'} a ${months} meses con enganche de ${formatCurrency(downPayment)}`}
-                target="_blank" rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 rounded-xl transition-all"
-              >
-                <MessageCircle size={18} />
-                Solicitar crédito por WhatsApp
-              </a>
             </>
           ) : (
             <div className="card p-12 text-center">

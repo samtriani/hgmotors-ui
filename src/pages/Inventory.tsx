@@ -266,16 +266,18 @@ export default function Inventory() {
                   onError={e => { (e.target as HTMLImageElement).src = 'https://via.placeholder.com/400x160/1E2330/8892A4?text=Sin+Imagen'; }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-hg-card/80 to-transparent" />
-                <div className="absolute top-2 right-2 flex flex-col gap-1 items-end">
+                <div className="absolute bottom-2 left-2">
                   <span className={`badge text-[10px] ${getStatusColor(car.status)}`}>{getStatusLabel(car.status)}</span>
-                  <span className={`badge text-[10px] ${badge.color}`}>{badge.label}</span>
                 </div>
               </div>
               <div className="p-3">
                 <h3 className="text-hg-white font-semibold text-sm leading-tight">{car.brand} {car.model}</h3>
                 <p className="text-hg-text text-xs">{car.version} · {car.year} · {formatNumber(car.km)} km</p>
                 <div className="flex items-center justify-between mt-2">
-                  <span className="text-hg-white font-bold font-mono text-sm">{formatCurrency(car.price)}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-hg-white font-bold font-mono text-sm">{formatCurrency(car.price)}</span>
+                    <span className={`badge text-[10px] ${badge.color}`}>{badge.label}</span>
+                  </div>
                   <div className="flex gap-1" onClick={e => e.stopPropagation()}>
                     <button
                       onClick={() => { setSelectedCar(car); setShowModal(true); }}
