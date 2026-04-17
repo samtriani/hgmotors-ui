@@ -55,9 +55,8 @@ export const getRoleLabel = (role: string) => {
   return map[role] || role;
 };
 
-export const calculateCredit = (price: number, downPayment: number, months: number) => {
+export const calculateCredit = (price: number, downPayment: number, months: number, annualRate = 0.18) => {
   const financed = price - downPayment;
-  const annualRate = 0.18; // 18% anual mock
   const monthlyRate = annualRate / 12;
   const monthlyPayment = financed * (monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
   const totalAmount = monthlyPayment * months + downPayment;

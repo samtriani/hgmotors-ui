@@ -218,44 +218,44 @@ export const AGENT_MONTHLY_REVENUE = [
 
 export type MonthlySaleDetail = {
   brand: string; model: string; version: string; year: number;
-  price: number; seller: string; method: string;
+  price: number; seller: string; client: string; method: string;
 };
 
 export const SALES_DETAIL_BY_MONTH: Record<string, MonthlySaleDetail[]> = {
   Nov: [
-    { brand: 'Honda',      model: 'Civic',      version: 'EX AUT',        year: 2023, price: 485000, seller: 'Alejandro', method: 'Contado' },
-    { brand: 'Kia',        model: 'Seltos',     version: 'SX AUT',        year: 2022, price: 375000, seller: 'Patricia',  method: 'Crédito' },
-    { brand: 'Nissan',     model: 'Kicks',      version: 'ADVANCE AUT',   year: 2022, price: 390000, seller: 'Omar',      method: 'Crédito' },
+    { brand: 'Honda',      model: 'Civic',      version: 'EX AUT',        year: 2023, price: 485000, seller: 'Alejandro Ruiz', client: 'Carlos Mendoza',    method: 'Contado' },
+    { brand: 'Kia',        model: 'Seltos',     version: 'SX AUT',        year: 2022, price: 375000, seller: 'Patricia Ríos',  client: 'Laura Jiménez',     method: 'Crédito' },
+    { brand: 'Nissan',     model: 'Kicks',      version: 'ADVANCE AUT',   year: 2022, price: 390000, seller: 'Omar Castro',      client: 'Roberto Salinas',   method: 'Crédito' },
   ],
   Dic: [
-    { brand: 'Toyota',     model: 'Corolla',    version: 'LE AUT',        year: 2023, price: 395000, seller: 'Alejandro', method: 'Contado' },
-    { brand: 'Honda',      model: 'HR-V',       version: 'UNIQUE AUT',    year: 2022, price: 420000, seller: 'Alejandro', method: 'Enganche + Crédito' },
-    { brand: 'Mazda',      model: 'CX-30',      version: 'IGT AUT',       year: 2021, price: 380000, seller: 'Patricia',  method: 'Crédito' },
-    { brand: 'Kia',        model: 'K3',         version: 'EX PACK AUT',   year: 2023, price: 435000, seller: 'Patricia',  method: 'Contado' },
-    { brand: 'Chevrolet',  model: 'Captiva',    version: 'LT',            year: 2022, price: 470000, seller: 'Omar',      method: 'Crédito' },
+    { brand: 'Toyota',     model: 'Corolla',    version: 'LE AUT',        year: 2023, price: 395000, seller: 'Alejandro Ruiz', client: 'Ana Torres',        method: 'Contado' },
+    { brand: 'Honda',      model: 'HR-V',       version: 'UNIQUE AUT',    year: 2022, price: 420000, seller: 'Alejandro Ruiz', client: 'Miguel Ángel Ruiz', method: 'Enganche + Crédito' },
+    { brand: 'Mazda',      model: 'CX-30',      version: 'IGT AUT',       year: 2021, price: 380000, seller: 'Patricia Ríos',  client: 'Sofía Herrera',     method: 'Crédito' },
+    { brand: 'Kia',        model: 'K3',         version: 'EX PACK AUT',   year: 2023, price: 435000, seller: 'Patricia Ríos',  client: 'Fernando Vega',     method: 'Contado' },
+    { brand: 'Chevrolet',  model: 'Captiva',    version: 'LT',            year: 2022, price: 470000, seller: 'Omar Castro',      client: 'Diana Castro',      method: 'Crédito' },
   ],
   Ene: [
-    { brand: 'Jeep',       model: 'Compass',    version: 'LATITUDE',      year: 2022, price: 510000, seller: 'Alejandro', method: 'Crédito' },
-    { brand: 'Volkswagen', model: 'Jetta',      version: 'COMFORTLINE',   year: 2023, price: 385000, seller: 'Alejandro', method: 'Contado' },
-    { brand: 'Hyundai',    model: 'Grand i10',  version: 'STD',           year: 2023, price: 440000, seller: 'Patricia',  method: 'Enganche + Crédito' },
-    { brand: 'Nissan',     model: 'Sentra',     version: 'SENSE',         year: 2022, price: 465000, seller: 'Omar',      method: 'Crédito' },
+    { brand: 'Jeep',       model: 'Compass',    version: 'LATITUDE',      year: 2022, price: 510000, seller: 'Alejandro Ruiz', client: 'Luis Morales',      method: 'Crédito' },
+    { brand: 'Volkswagen', model: 'Jetta',      version: 'COMFORTLINE',   year: 2023, price: 385000, seller: 'Alejandro Ruiz', client: 'Patricia Guzmán',   method: 'Contado' },
+    { brand: 'Hyundai',    model: 'Grand i10',  version: 'STD',           year: 2023, price: 440000, seller: 'Patricia Ríos',  client: 'Ernesto Núñez',     method: 'Enganche + Crédito' },
+    { brand: 'Nissan',     model: 'Sentra',     version: 'SENSE',         year: 2022, price: 465000, seller: 'Omar Castro',      client: 'Valeria Reyes',     method: 'Crédito' },
   ],
   Feb: [
-    { brand: 'Ford',       model: 'Territory',  version: 'TITANIUM AUT',  year: 2023, price: 485000, seller: 'Alejandro', method: 'Crédito' },
-    { brand: 'Honda',      model: 'Civic',      version: 'TOURING AUT',   year: 2024, price: 335000, seller: 'Alejandro', method: 'Contado' },
-    { brand: 'Kia',        model: 'Forte',      version: 'LX AUT',        year: 2023, price: 370000, seller: 'Patricia',  method: 'Crédito' },
-    { brand: 'Mazda',      model: '3',          version: 'GRAND TOURING', year: 2025, price: 460000, seller: 'Patricia',  method: 'Contado' },
-    { brand: 'Toyota',     model: 'Corolla',    version: 'SE AUT',        year: 2024, price: 450000, seller: 'Patricia',  method: 'Enganche + Crédito' },
-    { brand: 'Nissan',     model: 'March',      version: 'SENSE',         year: 2023, price: 300000, seller: 'Omar',      method: 'Crédito' },
+    { brand: 'Ford',       model: 'Territory',  version: 'TITANIUM AUT',  year: 2023, price: 485000, seller: 'Alejandro Ruiz', client: 'Jorge Ramírez',     method: 'Crédito' },
+    { brand: 'Honda',      model: 'Civic',      version: 'TOURING AUT',   year: 2024, price: 335000, seller: 'Alejandro Ruiz', client: 'Claudia Peña',      method: 'Contado' },
+    { brand: 'Kia',        model: 'Forte',      version: 'LX AUT',        year: 2023, price: 370000, seller: 'Patricia Ríos',  client: 'Ricardo Soto',      method: 'Crédito' },
+    { brand: 'Mazda',      model: '3',          version: 'GRAND TOURING', year: 2025, price: 460000, seller: 'Patricia Ríos',  client: 'Mariana López',     method: 'Contado' },
+    { brand: 'Toyota',     model: 'Corolla',    version: 'SE AUT',        year: 2024, price: 450000, seller: 'Patricia Ríos',  client: 'Héctor Vargas',     method: 'Enganche + Crédito' },
+    { brand: 'Nissan',     model: 'March',      version: 'SENSE',         year: 2023, price: 300000, seller: 'Omar Castro',      client: 'Gabriela Fuentes',  method: 'Crédito' },
   ],
   Mar: [
-    { brand: 'Ford',       model: 'Bronco Sport', version: 'BIG BEND',   year: 2022, price: 485000, seller: 'Alejandro', method: 'Contado' },
-    { brand: 'Mazda',      model: 'CX-5',       version: 'GRAND TOURING', year: 2023, price: 475000, seller: 'Alejandro', method: 'Crédito' },
-    { brand: 'Hyundai',    model: 'HB20',       version: 'GL AUT',        year: 2023, price: 400000, seller: 'Alejandro', method: 'Enganche + Crédito' },
-    { brand: 'BMW',        model: '330e',       version: 'HÍBRIDO AUT',   year: 2024, price: 515000, seller: 'Patricia',  method: 'Contado' },
-    { brand: 'Kia',        model: 'Seltos',     version: 'SXL AUT',       year: 2024, price: 440000, seller: 'Patricia',  method: 'Crédito' },
-    { brand: 'Volkswagen', model: 'Taos',       version: 'COMFORTLINE',   year: 2022, price: 425000, seller: 'Omar',      method: 'Crédito' },
-    { brand: 'Nissan',     model: 'Frontier',   version: 'PRO-4X AUT',    year: 2022, price: 410000, seller: 'Omar',      method: 'Enganche + Crédito' },
+    { brand: 'Ford',       model: 'Bronco Sport', version: 'BIG BEND',   year: 2022, price: 485000, seller: 'Alejandro Ruiz', client: 'Andrés Delgado',    method: 'Contado' },
+    { brand: 'Mazda',      model: 'CX-5',       version: 'GRAND TOURING', year: 2023, price: 475000, seller: 'Alejandro Ruiz', client: 'Isabel Campos',     method: 'Crédito' },
+    { brand: 'Hyundai',    model: 'HB20',       version: 'GL AUT',        year: 2023, price: 400000, seller: 'Alejandro Ruiz', client: 'Tomás Ríos',        method: 'Enganche + Crédito' },
+    { brand: 'BMW',        model: '330e',       version: 'HÍBRIDO AUT',   year: 2024, price: 515000, seller: 'Patricia Ríos',  client: 'Natalia Espinoza',  method: 'Contado' },
+    { brand: 'Kia',        model: 'Seltos',     version: 'SXL AUT',       year: 2024, price: 440000, seller: 'Patricia Ríos',  client: 'César Mendívil',    method: 'Crédito' },
+    { brand: 'Volkswagen', model: 'Taos',       version: 'COMFORTLINE',   year: 2022, price: 425000, seller: 'Omar Castro',      client: 'Rosa Elena Parra',  method: 'Crédito' },
+    { brand: 'Nissan',     model: 'Frontier',   version: 'PRO-4X AUT',    year: 2022, price: 410000, seller: 'Omar Castro',      client: 'Alberto Quintero',  method: 'Enganche + Crédito' },
   ],
 };
 

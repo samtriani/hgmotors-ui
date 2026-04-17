@@ -46,7 +46,7 @@ function StatCard({ icon: Icon, label, value, sub, color = 'text-hg-red', trend,
 }
 
 const SELLER_COLORS: Record<string, string> = {
-  Alejandro: '#dc2626', Patricia: '#7c3aed', Omar: '#d97706',
+  'Alejandro Ruiz': '#dc2626', 'Patricia Ríos': '#7c3aed', 'Omar Castro': '#d97706',
 };
 
 function DirectorDashboard() {
@@ -68,9 +68,9 @@ function DirectorDashboard() {
       {/* KPIs */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard icon={DollarSign} label="Ventas del Mes" value={formatCurrency(ventasMes)} sub="Mes en curso" color="text-emerald-400" trend="+12%" onClick={() => navigate('/ventas')} />
-        <StatCard icon={Car} label="Inventario Total" value={formatCurrency(totalInventario)} sub={`${disponibles} autos disponibles`} color="text-blue-400" />
-        <StatCard icon={AlertTriangle} label="Autos +60 días" value={alerta60} sub="Requieren atención" color="text-amber-400" />
-        <StatCard icon={Users} label="Leads Activos" value={leadsActivos} sub="Clientes en proceso" color="text-violet-400" trend="+3 hoy" />
+        <StatCard icon={Car} label="Inventario Total" value={formatCurrency(totalInventario)} sub={`${disponibles} autos disponibles`} color="text-blue-400" onClick={() => navigate('/inventario')} />
+        <StatCard icon={AlertTriangle} label="Autos +60 días" value={alerta60} sub="Requieren atención" color="text-amber-400" onClick={() => navigate('/inventario')} />
+        <StatCard icon={Users} label="Leads Activos" value={leadsActivos} sub="Clientes en proceso" color="text-violet-400" trend="+3 hoy" onClick={() => navigate('/clientes')} />
       </div>
 
       {/* Charts row */}
@@ -131,11 +131,13 @@ function DirectorDashboard() {
               ? sales.filter(s => s.status === 'COMPLETADA').map(s => {
                   const car = cars.find(c => c.id === s.carId);
                   const seller = MOCK_USERS.find(u => u.id === s.sellerId);
+                  const client = clients.find(c => c.id === s.clientId);
                   return {
                     brand: car?.brand ?? '—', model: car?.model ?? '—',
                     version: car?.version ?? '', year: car?.year ?? 0,
                     price: s.finalPrice,
-                    seller: seller?.name.split(' ')[0] ?? '—',
+                    seller: seller?.name ?? '—',
+                    client: client?.name ?? '—',
                     method: s.paymentMethod.replace('_', ' '),
                   };
                 })
@@ -167,6 +169,11 @@ function DirectorDashboard() {
                           <div className="min-w-0">
                             <p className="text-hg-white text-xs font-medium truncate">{d.brand} {d.model} {d.year}</p>
                             <p className="text-hg-text text-[10px] truncate">{d.version} · {d.method}</p>
+                            <div className="flex items-center gap-2 mt-0.5">
+                              <span className="text-hg-text text-[10px]">Cliente: <span className="text-hg-light">{d.client}</span></span>
+                              <span className="text-hg-border">·</span>
+                              <span className="text-hg-text text-[10px]">Vendedor: <span style={{ color }}>{d.seller}</span></span>
+                            </div>
                           </div>
                         </div>
                         <span className="text-emerald-400 text-xs font-mono font-bold flex-shrink-0 ml-3">{formatCurrency(d.price)}</span>
