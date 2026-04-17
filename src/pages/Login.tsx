@@ -14,7 +14,7 @@ const DEMO_USERS = [
 
 export default function Login() {
   const [email, setEmail] = useState('director@hg.com');
-  const [password, setPassword] = useState('hg2024');
+  const [password, setPassword] = useState('hg2026');
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -118,13 +118,13 @@ export default function Login() {
           {/* Demo accounts */}
           <div className="mt-6 pt-5 border-t border-hg-border">
             <p className="text-hg-text text-xs font-medium uppercase tracking-wider mb-3">
-              Accesos demo — contraseña: <span className="text-hg-light font-mono">hg2024</span>
+              Accesos demo — contraseña: <span className="text-hg-light font-mono">hg2026</span>
             </p>
             <div className="space-y-1.5">
               {DEMO_USERS.map(u => (
                 <button
                   key={u.email}
-                  onClick={() => { setEmail(u.email); setPassword('hg2024'); setError(''); }}
+                  onClick={() => { setEmail(u.email); setPassword('hg2026'); setError(''); }}
                   className="w-full flex items-center justify-between px-3 py-2 rounded-lg hover:bg-hg-muted/50 transition-colors group"
                 >
                   <span className={`text-xs font-medium ${u.color}`}>{u.role}</span>
@@ -136,7 +136,7 @@ export default function Login() {
         </div>
 
         <p className="text-center text-hg-text/50 text-xs mt-6">
-          HG Motors © 2024 · Plaza Andanza, Mazatlán, Sin.
+          HG Motors © 2026 · Plaza Andanza, Mazatlán, Sin.
         </p>
       </div>
     </div>

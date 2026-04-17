@@ -11,11 +11,11 @@ export const MOCK_USERS: User[] = [
 ];
 
 export const MOCK_PASSWORDS: Record<string, string> = {
-  'director@hg.com': 'hg2024',
-  'gerente@hg.com': 'hg2024',
-  'vendedor@hg.com': 'hg2024',
-  'taller@hg.com': 'hg2024',
-  'admin@hg.com': 'hg2024',
+  'director@hg.com': 'hg2026',
+  'gerente@hg.com': 'hg2026',
+  'vendedor@hg.com': 'hg2026',
+  'taller@hg.com': 'hg2026',
+  'admin@hg.com': 'hg2026',
 };
 
 export const MOCK_CARS: Car[] = [
