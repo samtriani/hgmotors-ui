@@ -13,8 +13,7 @@ interface HeaderProps {
 }
 
 export default function Header({ onMenuToggle, pageTitle }: HeaderProps) {
-  const user = useAuthStore(s => s.user);
-  const logout = useAuthStore(s => s.logout);
+  const { user, logout } = useAuthStore();
   const cars = useInventoryStore(s => s.cars);
   const clients = useCRMStore(s => s.clients);
   const sales = useSalesStore(s => s.sales);
@@ -23,10 +22,8 @@ export default function Header({ onMenuToggle, pageTitle }: HeaderProps) {
   const [query, setQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
-  const [userOpen, setUserOpen] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
-  const userRef = useRef<HTMLDivElement>(null);
 
   // ── Search results ──────────────────────────────────────────────
   const searchResults = useMemo(() => {
@@ -83,7 +80,6 @@ export default function Header({ onMenuToggle, pageTitle }: HeaderProps) {
     function handle(e: MouseEvent) {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false);
       if (notifRef.current && !notifRef.current.contains(e.target as Node)) setNotifOpen(false);
-      if (userRef.current && !userRef.current.contains(e.target as Node)) setUserOpen(false);
     }
     document.addEventListener('mousedown', handle);
     return () => document.removeEventListener('mousedown', handle);
@@ -224,37 +220,23 @@ export default function Header({ onMenuToggle, pageTitle }: HeaderProps) {
         )}
       </div>
 
-      {/* User avatar + dropdown */}
+      {/* User info + logout */}
       {user && (
-        <div className="relative" ref={userRef}>
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-hg-red/20 border border-hg-red/30 flex items-center justify-center flex-shrink-0">
+            <span className="text-hg-red text-xs font-bold font-mono">{user.avatar}</span>
+          </div>
+          <div className="hidden lg:block">
+            <p className="text-hg-white text-xs font-medium leading-tight">{user.name}</p>
+            <p className="text-hg-text text-[10px] leading-tight">{getRoleLabel(user.role)}</p>
+          </div>
           <button
-            onClick={() => setUserOpen(o => !o)}
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            onClick={() => { logout(); navigate('/login'); }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-hg-text hover:text-hg-red hover:bg-hg-red/10 transition-all ml-1"
+            title="Cerrar sesión"
           >
-            <div className="w-8 h-8 rounded-lg bg-hg-red/20 border border-hg-red/30 flex items-center justify-center">
-              <span className="text-hg-red text-xs font-bold font-mono">{user.avatar}</span>
-            </div>
-            <div className="hidden lg:block text-left">
-              <p className="text-hg-white text-xs font-medium leading-tight">{user.name}</p>
-              <p className="text-hg-text text-[10px] leading-tight">{getRoleLabel(user.role)}</p>
-            </div>
+            <LogOut size={16} />
           </button>
-
-          {userOpen && (
-            <div className="absolute top-full right-0 mt-2 w-48 bg-hg-card border border-hg-border rounded-xl shadow-2xl overflow-hidden z-50">
-              <div className="px-4 py-3 border-b border-hg-border">
-                <p className="text-hg-white text-xs font-semibold truncate">{user.name}</p>
-                <p className="text-hg-text text-[10px] mt-0.5">{getRoleLabel(user.role)}</p>
-              </div>
-              <button
-                onClick={() => { logout(); navigate('/login'); }}
-                className="w-full flex items-center gap-3 px-4 py-3 text-hg-red hover:bg-hg-red/10 transition-colors text-left"
-              >
-                <LogOut size={14} />
-                <span className="text-sm font-medium">Cerrar sesión</span>
-              </button>
-            </div>
-          )}
         </div>
       )}
     </header>
